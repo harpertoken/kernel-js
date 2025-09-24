@@ -18,6 +18,15 @@ Kernel version: xnu-11417.101.15
 
 Node.js, Git
 
+## Docker
+
+```bash
+docker build -t macos-kernel-tool .
+docker run macos-kernel-tool
+```
+
+Note: In container (Linux), kernel version shows "Unknown" as git repo not included.
+
 ## License
 
 MIT
