@@ -17,7 +17,7 @@ if [[ $confirm != [yY] ]]; then
 fi
 
 # Use git filter-branch to rewrite messages
-git filter-branch -f --msg-filter 'awk '\''{if (NR==1) {line = tolower($0); print substr(line,1,60)} else {print}}'\''' -- --all
+git filter-branch -f --msg-filter 'perl -pe '\''if ($. == 1) { $_ = lc substr($_,0,60) }'\''' -- --all
 
 echo "History rewritten. Force-pushing..."
 git push --force --all
