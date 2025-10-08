@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Commit-msg hook to enforce conventional commit standards
+# - First line must start with a type (feat, fix, docs, style, refactor, test, chore, perf, ci, build, revert) followed by ': '
+# - First line must be lowercase
+# - First line must be ≤60 characters
+
+msg_file=$1
+first_line=$(head -n1 "$msg_file")
+
+# Check for conventional commit type
+if ! echo "$first_line" | grep -qE '^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\(.+\))?: '; then
+    echo "Error: Commit message must start with a conventional commit type (e.g., feat:, fix:) followed by a space."
+    exit 1
+fi
+
+# Check if the description part is lowercase
+description=$(echo "$first_line" | sed 's/^[^:]*: //')
+if ! echo "$description" | grep -qE '^[a-z]'; then
+    echo "Error: Commit message description must start with a lowercase letter."
+    exit 1
+fi
+
+# Check length ≤60
+if [ ${#first_line} -gt 60 ]; then
+    echo "Error: Commit message first line must be 60 characters or less."
+    exit 1
+fi
