@@ -17,16 +17,7 @@ if [[ $confirm != [yY] ]]; then
 fi
 
 # Use git filter-branch to rewrite messages
-git filter-branch --msg-filter '
-python3 -c "
-import sys
-msg = sys.stdin.read().strip()
-lines = msg.splitlines()
-first = lines[0].lower()[:60] if lines else ""
-rest = '\n'.join(lines[1:]) if len(lines) > 1 else ""
-print(first + ('\n' + rest if rest else ''))
-"
-' -- --all
+git filter-branch --msg-filter 'sed "1s/.*/\L&/;1s/^\(.\{60\}\).*/\1/"' -- --all
 
 echo "History rewritten. Force-pushing..."
 git push --force --all
