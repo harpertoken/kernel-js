@@ -21,12 +21,10 @@ git filter-branch --msg-filter '
 python3 -c "
 import sys
 msg = sys.stdin.read().strip()
-lines = msg.split('\n', 1)
-first = lines[0].lower()[:60]
-if len(lines) > 1:
-    print(first + '\n' + lines[1])
-else:
-    print(first)
+lines = msg.splitlines()
+first = lines[0].lower()[:60] if lines else ""
+rest = '\n'.join(lines[1:]) if len(lines) > 1 else ""
+print(first + ('\n' + rest if rest else ''))
 "
 ' -- --all
 
